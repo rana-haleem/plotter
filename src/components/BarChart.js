@@ -6,6 +6,7 @@ import "./Bar.css";
 import Column from "./Column";
 import { useDrop } from "react-dnd";
 import initialData from "./initialData";
+import ErrorComponent from "./ErrorComponent";
 
 const LineChart = () => {
   const [columnss, setColumnData] = useState([]);
@@ -13,6 +14,7 @@ const LineChart = () => {
   const [optionsData, setChartOptions] = useState("");
   const [dimensionBoard, setDimensionBoard] = useState([]);
   const [measureBoard, setMeasureBoard] = useState([]);
+  const [hasError, setHasError] = useState(false);
 
   const getColumns = async () => {
     const columns = [];
@@ -60,69 +62,74 @@ const LineChart = () => {
 
   useEffect(() => {
     if (dimensionBoard && measureBoard != "") {
-      axios
-        .post("https://plotter-task.herokuapp.com/data", {
-          measures: measureBoard,
-          dimension: dimensionBoard[0],
-        })
-        .then(
-          (response) => {
-            setChartOptions({
-              scales: {
-                x: {
-                  display: true,
-                  title: {
+      try {
+        axios
+          .post("https://plotter-task.herokuapp.com/data", {
+            measures: measureBoard,
+            dimension: dimensionBoard[0],
+          })
+          .then(
+            (response) => {
+              setChartOptions({
+                scales: {
+                  x: {
                     display: true,
-                    text: dimensionBoard[0],
+                    title: {
+                      display: true,
+                      text: dimensionBoard[0],
+                    },
+                  },
+                  y: {
+                    display: true,
+                    title: {
+                      display: true,
+                      text: measureBoard,
+                    },
                   },
                 },
-                y: {
-                  display: true,
-                  title: {
-                    display: true,
-                    text: measureBoard,
+              });
+              setChartData({
+                labels: response.data[0].values,
+                datasets: [
+                  {
+                    label: measureBoard,
+                    data: response.data[1].values,
+                    backgroundColor: [
+                      "rgba(255, 99, 132, 0.2)",
+                      "rgba(54, 162, 235, 0.2)",
+                      "rgba(255, 206, 86, 0.2)",
+                      "rgba(75, 192, 192, 0.2)",
+                      "rgba(153, 102, 255, 0.2)",
+                      "rgba(255, 159, 64, 0.2)",
+                    ],
+                    borderColor: [
+                      "rgba(255, 99, 132, 1)",
+                      "rgba(54, 162, 235, 1)",
+                      "rgba(255, 206, 86, 1)",
+                      "rgba(75, 192, 192, 1)",
+                      "rgba(153, 102, 255, 1)",
+                      "rgba(255, 159, 64, 1)",
+                    ],
+                    borderWidth: 1,
                   },
-                },
-              },
-            });
-            setChartData({
-              labels: response.data[0].values,
-              datasets: [
-                {
-                  label: measureBoard,
-                  data: response.data[1].values,
-                  backgroundColor: [
-                    "rgba(255, 99, 132, 0.2)",
-                    "rgba(54, 162, 235, 0.2)",
-                    "rgba(255, 206, 86, 0.2)",
-                    "rgba(75, 192, 192, 0.2)",
-                    "rgba(153, 102, 255, 0.2)",
-                    "rgba(255, 159, 64, 0.2)",
-                  ],
-                  borderColor: [
-                    "rgba(255, 99, 132, 1)",
-                    "rgba(54, 162, 235, 1)",
-                    "rgba(255, 206, 86, 1)",
-                    "rgba(75, 192, 192, 1)",
-                    "rgba(153, 102, 255, 1)",
-                    "rgba(255, 159, 64, 1)",
-                  ],
-                  borderWidth: 1,
-                },
-              ],
-            });
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+                ],
+              });
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+      } catch {
+        setHasError(true);
+      }
     }
   }, [dimensionBoard, measureBoard]);
 
   return (
     <div>
+      {hasError && <ErrorComponent></ErrorComponent>}
       <h2>Plotter</h2>
-      {columnss && (
+      {!hasError && (
         <div className="container">
           <div className="columns">
             <span>Columns</span>
