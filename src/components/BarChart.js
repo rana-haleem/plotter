@@ -141,8 +141,8 @@ const LineChart = () => {
           <div className="BarContainer" style={{ height: "400px" }}>
             <div className={isOver ? "board dropping" : "board"} ref={drop}>
               {dimensionBoard &&
-                dimensionBoard?.map((column) => {
-                  return <Column id={column} item={column}></Column>;
+                dimensionBoard?.map((column, i) => {
+                  return <Column key={i} id={column} item={column}></Column>;
                 })}
               <button
                 disabled={dimensionBoard !== "" ? false : true}
@@ -153,8 +153,8 @@ const LineChart = () => {
             </div>
             <div className={isOver2 ? "board dropping" : "board"} ref={drop2}>
               {measureBoard &&
-                measureBoard?.map((column) => {
-                  return <Column id={column} item={column}></Column>;
+                measureBoard?.map((column, i) => {
+                  return <Column key={i} id={column} item={column}></Column>;
                 })}
               <button
                 disabled={measureBoard !== "" ? false : true}
