@@ -144,7 +144,7 @@ const LineChart = () => {
                 Clear
               </button>
             </div>
-            <div className="board" ref={drop2}>
+            <div className={isOver2 ? "board dropping" : "board"} ref={drop2}>
               {measureBoard &&
                 measureBoard?.map((column) => {
                   return <Column id={column} item={column}></Column>;
