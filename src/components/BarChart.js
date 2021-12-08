@@ -89,11 +89,11 @@ const LineChart = () => {
                 },
               });
               setChartData({
-                labels: response.data[0].values,
+                labels: response?.data[0]?.values,
                 datasets: [
                   {
                     label: measureBoard,
-                    data: response.data[1].values,
+                    data: response?.data[1]?.values,
                     backgroundColor: [
                       "rgba(255, 99, 132, 0.2)",
                       "rgba(54, 162, 235, 0.2)",
