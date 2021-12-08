@@ -61,7 +61,7 @@ const LineChart = () => {
   };
 
   useEffect(() => {
-    if (dimensionBoard && measureBoard != "") {
+    if (dimensionBoard && measureBoard !== "") {
       try {
         axios
           .post("https://plotter-task.herokuapp.com/data", {
@@ -145,7 +145,7 @@ const LineChart = () => {
                   return <Column id={column} item={column}></Column>;
                 })}
               <button
-                disabled={dimensionBoard != "" ? false : true}
+                disabled={dimensionBoard !== "" ? false : true}
                 onClick={() => setDimensionBoard("")}
               >
                 Clear
@@ -157,7 +157,7 @@ const LineChart = () => {
                   return <Column id={column} item={column}></Column>;
                 })}
               <button
-                disabled={measureBoard != "" ? false : true}
+                disabled={measureBoard !== "" ? false : true}
                 onClick={() => setMeasureBoard("")}
               >
                 Clear
